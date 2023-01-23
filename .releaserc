@@ -1,0 +1,43 @@
+{
+  "branches": ["main"],
+  "plugins": [
+    ["@semantic-release/commit-analyzer",{
+       "preset": "angular",
+       "releaseRules": [
+         {"type": "docs", "release": "patch"},
+         {"type": "refactor", "release": "patch"},
+         {"type": "style", "release": "patch"},
+         {"type": "chore", "release": "patch"},
+         {"type": "ci", "release": "patch"}
+       ],
+       "parserOpts": {
+         "noteKeywords": ["BREAKING CHANGE", "BREAKING CHANGES"]
+       }
+     }],
+    "@semantic-release/release-notes-generator",
+    "@semantic-release/git",
+    "@semantic-release/github"
+  ],
+  "verifyConditions": [
+    "@semantic-release/git"
+  ],
+  "prepare": [
+    "@semantic-release/git"
+  ],
+  "publish": [
+    "@semantic-release/github"
+  ],
+  "success": [
+    "@semantic-release/github"
+  ],
+  "fail": [
+    "@semantic-release/github"
+  ],
+  "git": {
+    "path": ".",
+    "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+  },
+  "github": {
+    "assets": "dist/*"
+  }
+}

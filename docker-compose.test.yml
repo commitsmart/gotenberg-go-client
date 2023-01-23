@@ -1,0 +1,17 @@
+version: "3"
+
+services:
+  gotenberg:
+    image: gotenberg/gotenberg:7
+    container_name: gotenberg
+    ports:
+      - "3000:3000"
+
+  test-gotenberg-go-client:
+    build:
+      dockerfile: "test.Dockerfile"
+      context: .
+    volumes:
+      - "$PWD:/tmp"
+    depends_on:
+      - gotenberg
