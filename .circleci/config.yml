@@ -10,7 +10,6 @@ jobs:
           name: Install dependencies
           command: |
             npm install -g semantic-release-cli
-            npm install
       - run:
           name: Start Docker
           command: |
