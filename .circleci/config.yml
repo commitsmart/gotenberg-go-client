@@ -1,0 +1,117 @@
+# Use the latest 2.1 version of CircleCI pipeline process engine.
+# See: https://circleci.com/docs/2.0/configuration-reference
+version: 2.1
+
+commands:
+  lint:
+    description: Runs the goalngci-lint
+    parameters:
+      attach-workspace:
+        default: false
+        description: |
+          Boolean for whether or not to attach to an existing workspace. Default is false.
+        type: boolean
+      checkout:
+        default: true
+        description: |
+          Boolean for whether or not to checkout as a first step. Default is true.
+        type: boolean
+      directories:
+        default: ./...
+        description: directory path list of the lint target
+        type: string
+      working-directory:
+        default: .
+        description: directory path for this job
+        type: string
+      workspace-root:
+        default: .
+        description: |
+          Workspace root path that is either an absolute path or a path relative to the working directory. Defaults to '.' (the working directory)
+        type: string
+    steps:
+      - when:
+          condition: << parameters.checkout >>
+          steps:
+            - checkout
+      - when:
+          condition: << parameters.attach-workspace >>
+          steps:
+            - attach_workspace:
+                at: << parameters.workspace-root >>
+      - run:
+          command: golangci-lint run << parameters.directories >>
+          name: Run goalngci-lint
+          working_directory: << parameters.working-directory >>
+executors:
+  golangci:
+    docker:
+      - image: golangci/golangci-lint:<< parameters.tag >>
+    parameters:
+      tag:
+        default: latest
+        description: tag of the docker image of `golangci/golangci-lint`
+        type: string
+# Define a job to be invoked later in a workflow.
+# See: https://circleci.com/docs/2.0/configuration-reference/#jobs
+jobs:
+  test:
+    # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
+    # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
+    docker:
+      - image: cimg/go:1.19.5
+    # Add steps to the job
+    # See: https://circleci.com/docs/2.0/configuration-reference/#steps
+    steps:
+      - checkout
+      - run:
+          name: "Test"
+          command: "go test ./..."
+  lint:
+    description: |
+      Lint the Go project with golangci-lint
+    executor:
+      name: golangci
+      tag: << parameters.tag >>
+    parameters:
+      attach-workspace:
+        default: false
+        description: |
+          Boolean for whether or not to attach to an existing workspace. Default is false.
+        type: boolean
+      checkout:
+        default: true
+        description: |
+          Boolean for whether or not to checkout as a first step. Default is true.
+        type: boolean
+      directories:
+        default: ./...
+        description: directory path list of the lint target
+        type: string
+      tag:
+        default: latest
+        description: tag of the docker image of `golangci/golangci-lint`
+        type: string
+      working-directory:
+        default: .
+        description: directory path for this job
+        type: string
+      workspace-root:
+        default: .
+        description: |
+          Workspace root path that is either an absolute path or a path relative to the working directory. Defaults to '.' (the working directory)
+        type: string
+    steps:
+    - lint:
+        attach-workspace: << parameters.attach-workspace >>
+        checkout: << parameters.checkout >>
+        directories: <<parameters.directories>>
+        working-directory: <<parameters.working-directory>>
+        workspace-root: << parameters.workspace-root >>
+
+# Invoke jobs via workflows
+# See: https://circleci.com/docs/2.0/configuration-reference/#workflows
+workflows:
+  test-workflow:
+    jobs:
+      - test
