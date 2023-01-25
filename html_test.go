@@ -14,8 +14,9 @@ import (
 )
 
 func TestHTMLFromString(t *testing.T) {
-	c := &Client{Hostname: "http://localhost:3000"}
+	c := &Client{Hostname: "http://gotenberg:3000"}
 	index, err := NewDocumentFromString("index.html", "<html>Foo</html>")
+	require.Nil(t, err)
 	req := NewConvertHTMLRequest(index)
 	dirPath, err := test.Rand()
 	require.Nil(t, err)
@@ -28,8 +29,9 @@ func TestHTMLFromString(t *testing.T) {
 }
 
 func TestHTMLFromBytes(t *testing.T) {
-	c := &Client{Hostname: "http://localhost:3000"}
+	c := &Client{Hostname: "http://gotenberg:3000"}
 	index, err := NewDocumentFromBytes("index.html", []byte("<html>Foo</html>"))
+	require.Nil(t, err)
 	req := NewConvertHTMLRequest(index)
 	dirPath, err := test.Rand()
 	require.Nil(t, err)
@@ -42,7 +44,7 @@ func TestHTMLFromBytes(t *testing.T) {
 }
 
 func TestHTMLComplete(t *testing.T) {
-	c := &Client{Hostname: "http://localhost:3000"}
+	c := &Client{Hostname: "http://gotenberg:3000"}
 	index, err := NewDocumentFromPath("index.html", test.HTMLTestFilePath(t, "index.html"))
 	require.Nil(t, err)
 	req := NewConvertHTMLRequest(index)
@@ -57,6 +59,7 @@ func TestHTMLComplete(t *testing.T) {
 	img, err := NewDocumentFromPath("img.gif", test.HTMLTestFilePath(t, "img.gif"))
 	require.Nil(t, err)
 	style, err := NewDocumentFromPath("style.css", test.HTMLTestFilePath(t, "style.css"))
+	require.Nil(t, err)
 	req.Assets(font, img, style)
 	req.ResultFilename("foo.pdf")
 	req.WaitTimeout(5)
@@ -83,7 +86,7 @@ func TestHTMLComplete(t *testing.T) {
 }
 
 func TestHTMLPageRanges(t *testing.T) {
-	c := &Client{Hostname: "http://localhost:3000"}
+	c := &Client{Hostname: "http://gotenberg:3000"}
 	index, err := NewDocumentFromPath("index.html", test.HTMLTestFilePath(t, "index.html"))
 	require.Nil(t, err)
 	req := NewConvertHTMLRequest(index)
