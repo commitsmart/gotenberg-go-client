@@ -7,6 +7,11 @@ jobs:
     steps:
       - checkout
       - run:
+          name: Install dependencies
+          command: |
+            npm install -g semantic-release-cli
+            npm install
+      - run:
           name: Start Docker
           command: |
             sudo service docker start
@@ -19,7 +24,14 @@ jobs:
           name: Stop and remove Docker Containers
           command: |
             docker-compose -f docker-compose.test.yml down
-
+      - run:
+          name: Release
+          command: |
+            if [[ $(git rev-parse --abbrev-ref HEAD) == "main" ]]; then
+              semantic-release
+            else
+              echo "Not on main branch, skipping release."
+            fi
 workflows:
   version: 2
   build_and_test:
