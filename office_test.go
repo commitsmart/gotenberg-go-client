@@ -6,6 +6,7 @@ import (
 	"github.com/commitsmart/gotenberg-go-client/test"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"os"
 	"testing"
 )
 
@@ -24,7 +25,7 @@ func TestOffice(t *testing.T) {
 	err = c.Store(context.Background(), req, dest)
 	assert.Nil(t, err)
 	assert.FileExists(t, dest)
-	//err = os.RemoveAll(dirPath)
+	err = os.RemoveAll(dirPath)
 	assert.Nil(t, err)
 }
 

@@ -6,6 +6,18 @@ A simple Go client for interacting with a Gotenberg API.
 
 Inspired by [thecodingmachine/gotenberg-go-client](https://github.com/thecodingmachine/gotenberg-go-client)
 
+## Gotenberg Modules
+
+
+| Module            | Implementation |
+|:------------------|---------------:|
+| Chromium          |              ✅ |
+| LibreOffice       |              ✅ |
+| PDF Engines       |                |
+| Prometheus        |                |
+| Logging           |                |
+| Graceful Shutdown |                |
+
 ## Install
 
 ```bash
