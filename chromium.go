@@ -40,6 +40,9 @@ const failOnConsoleExceptions string = "failOnConsoleExceptions" // Return a 409
 // CSS
 const emulatedMediaType string = "emulatedMediaType" // The media type to emulate, either "screen" or "print" - empty means "print"
 
+// Custom Tags
+const extraLinkTags string = "extraLinkTags" // Add custom tags
+
 // PDF
 const pdfFormat string = "pdfFormat" // The PDF format of the resulting PDF
 
@@ -182,4 +185,10 @@ func (req *chromiumRequest) EmulatedMediaType(mediaType string) {
 // PDFFormat sets pdfFormat form field
 func (req *chromiumRequest) PDFFormat(format string) {
 	req.values[pdfFormat] = format
+}
+
+// ExtraLinkTags set up custom tags!
+// example:'extraLinkTags="[{\"href\":\"https://my.cdn.css\"}]"'
+func (req *chromiumRequest) ExtraLinkTags(link string) {
+	req.values[extraLinkTags] = link
 }
