@@ -1,6 +1,7 @@
 package gotenberg
 
 import (
+	"encoding/json"
 	"fmt"
 	"strconv"
 	"time"
@@ -45,6 +46,17 @@ const extraLinkTags string = "extraLinkTags" // Add custom tags
 
 // PDF
 const pdfFormat string = "pdfFormat" // The PDF format of the resulting PDF
+
+// Metadata
+const metaData string = "metadata" // Metadata (title, author, ...) of the resulting PDF
+
+type MetaData struct {
+	Title    string `json:"Title,omitempty"`
+	Author   string `json:"Author,omitempty"`
+	Producer string `json:"Producer,omitempty"`
+	Creator  string `json:"Creator,omitempty"`
+	Subject  string `json:"Subject,omitempty"`
+}
 
 // Paper Sizes
 var (
@@ -191,4 +203,16 @@ func (req *chromiumRequest) PDFFormat(format string) {
 // example:'extraLinkTags="[{\"href\":\"https://my.cdn.css\"}]"'
 func (req *chromiumRequest) ExtraLinkTags(link string) {
 	req.values[extraLinkTags] = link
+}
+
+// MetaData sets metadata form field (title, author, ...)
+func (req *chromiumRequest) MetaData(m MetaData) error {
+	i, err := json.Marshal(m)
+	if err != nil {
+		return err
+	}
+
+	req.values[metaData] = string(i)
+
+	return nil
 }
