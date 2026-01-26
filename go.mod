@@ -1,8 +1,8 @@
 module github.com/commitsmart/gotenberg-go-client
 
-go 1.19
+go 1.22
 
-require github.com/stretchr/testify v1.8.1
+require github.com/stretchr/testify v1.11.1
 
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
