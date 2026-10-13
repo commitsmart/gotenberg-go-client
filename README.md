@@ -76,4 +76,20 @@ bb, err := io.ReadAll(resp.Body)
 check(err)
 ```
 
+### URL to PDF
+
+```golang
+req := gotenberg.NewConvertURLRequest("https://example.com/offer/AB12CD34?print=1")
+req.PaperSize(gotenberg.A4)
+req.Margins(gotenberg.NoMargins)
+req.PrintBackground(true)
+req.EmulatedMediaType("print")
+req.WaitForExpression("window.__ready === true")
+err := req.MetaData(gotenberg.MetaData{Title: "Offer AB12CD34"})
+check(err)
+
+resp, err := client.Post(ctx, req)
+check(err)
+```
+
 For more complete guides read the [documentation](https://gotenberg.dev/docs/about).
